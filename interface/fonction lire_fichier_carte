@@ -1,0 +1,30 @@
+    def lire_fichier_carte(self, nom_fichier):
+        """
+        Cette méthode lit le fichier et convertit son contenu en cases.
+
+        Args:
+            nom_fichier (str): Le nom du fichier à lire
+
+        Returns:
+            dict: Le dictionnaire de cases, dont les clés sont les coordonnées.
+        """
+        # VOTRE CODE ICI
+        #hérite Carte, call definir voisins(carte), inspire carteautogener
+        #clé = coordonnees (x,y); valeurs des objets Case
+        coordonnees = [(h, l) for h in range(hauteur) for l in range(largeur)]
+        cases = {coor: Case(coor) for coor in coordonnees}
+        try:
+            fichier_a_lire = open(nom_fichier,"r")
+            fichier_format_texte = fichier_a_lire.readlines()
+            fichier_a_lire.close()
+        except ValueError:
+            messagebox.showerror("Erreur", "Le nom du fichier est inexistant")
+        for caractere in fichier_format_texte:
+            if caractere != " " or caractere != ".":
+                raise ValueError("Erreur. Le fichier contient des caractères invalides")
+            else:
+                cases[caractere] = fichier_format_texte[caractere]
+        if carte.verifier_cases_connectees(cases) == False:
+            raise ValueError("Erreur", "Toutes les cases ne sont pas connectées")
+        carte.definir_voisins(cases)
+        return cases
